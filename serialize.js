@@ -1,6 +1,7 @@
 "use strict";
 /* 
-See https://github.com/morgan3d/serializejs for documentation.
+See https://github.com/morgan3d/serializejs for documentation
+and the latest version.
 
 Copyright 2025 Morgan McGuire
 Licensed under the Open Source MIT License
