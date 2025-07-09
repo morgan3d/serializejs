@@ -8,9 +8,11 @@ Provides two routines for loading and saving JavaScript values to strings:
 
 To use, put:
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 <script src="https://morgan3d.github.io/seralizejs/serialize.js"></script>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-in your code or download and host locally.
+in your code, or download and host locally.
 
 Unlike `JSON.parse` and `JSON.stringify`, this API supports:
 
