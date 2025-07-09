@@ -18,14 +18,13 @@ Unlike `JSON.parse` and `JSON.stringify`, this API supports:
     - `BigInt`, `Symbol`, and `undefined` 
     - `Date`, `RegExp`, `URL`, `Map`, and `Set`
     - Object and Arrays that may form arbitrary graphs, including cycles
-      (via a [Structured Cloning](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm) algorithm)
+      via a [Structured Cloning](https://developer.mozilla.org/en-US/docs/WebAPI/Web_Workers_API/Structured_clone_algorithm) algorithm
     - TypedArrays (Uint32Array, Int32Array, Uint16Array, Int16Array, Uint8Array, 
       Uint8ClampedArray, Int8Array, Float64Array, Float32Array, Float16Array, 
       BigUint64Array, BigInt64Array)
     - Built-in functions that are top-level or on the `Math` object 
       (e.g., `isFinite`, `Math.cos`)
 
-    - TODO: Map, Set
 
 This API does _not_ support:
 
