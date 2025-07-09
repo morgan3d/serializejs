@@ -110,7 +110,7 @@ function decode(enc, memory, untransform) {
 
     case 'Array':
     case 'object':
-        result = enc.type === 'array' ? new Array(enc.value.length) : new Object();
+        result = enc.type === 'Array' ? new Array(enc.value.length) : new Object();
         memory.push(result);
         for (const i in enc.value) {
             result[i] = decode(enc.value[i], memory, untransform);
@@ -209,17 +209,18 @@ function encode(value, memoryMap = new Map(), transform) {
     // Switch on the post-transform type
     let type = typeof value;
     if (type === 'object') {
-        if (Array.isArray(value)) {
+        if (value === null) {
+            return {type: 'null'};
+        } else if (Array.isArray(value)) {
             type = 'Array';
-        } else if (typedArrayTrait[value.constructor.name] || supportedBuiltinClasses.contains(value.constructor)) {
+        } else if (value.constructor && (typedArrayTrait[value.constructor.name] || supportedBuiltInClasses.has(value.constructor))) {
             type = value.constructor.name;
         }
     }
 
     switch (type) {
     case 'undefined':
-    case 'null':
-        return {type: type, value: type};
+        return {type: type};
 
     case 'number':
         return {type: type, value: serializeNumber(value)};
@@ -258,7 +259,7 @@ function encode(value, memoryMap = new Map(), transform) {
                 // Never saw this object before; serialize it.
                 // First update the memory map so that we know
                 // how to reach it again.
-                memoryMap.set(memoizeValue, memoryMap.size());
+                memoryMap.set(memoizeValue, memoryMap.size);
 
                 const dst = {type: type};
                 if (type.endsWith('Array') && type !== 'Array') {
