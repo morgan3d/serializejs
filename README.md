@@ -18,14 +18,13 @@ Unlike `JSON.parse` and `JSON.stringify`, this API supports:
 
     - Special floating point values `Infinity`, `-Infinity`, `NaN`, and `-0`
     - `BigInt`, `Symbol`, and `undefined` 
-    - `Date`, `RegExp`, `URL`, `Map`, and `Set`
-    - Object and Arrays that may form arbitrary graphs, including cycles
+    - `Object`, `Array`, `Date`, `RegExp`, `URL`, `Map`, and `Set`
     - TypedArrays (Uint32Array, Int32Array, Uint16Array, Int16Array, Uint8Array, 
       Uint8ClampedArray, Int8Array, Float64Array, Float32Array, Float16Array, 
       BigUint64Array, BigInt64Array)
     - Built-in functions that are top-level or on the `Math` object 
       (e.g., `isFinite`, `Math.cos`)
-
+    - Data structures that form arbitrary graphs, including with cycles
 
 This API does _not_ support:
 
