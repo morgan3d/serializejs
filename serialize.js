@@ -188,7 +188,7 @@ function decode(enc, memory, untransform) {
     }
 
     if (untransform) {
-        result = untransform(result);
+        result = untransform(result, enc.custom_type);
     }
 
     return result;
@@ -201,9 +201,10 @@ const supportedBuiltInClasses = new Set([Map, Date, Set, RegExp, URL]);
 function encode(value, memoryMap = new Map(), transform) {
     // Store the original object for memoizing
     const memoizeValue = value;
+    let custom_type;
 
     if (transform) {
-        value = transform(value);
+        [value, custom_type] = transform(value);
     }
 
     // Switch on the post-transform type
@@ -218,25 +219,34 @@ function encode(value, memoryMap = new Map(), transform) {
         }
     }
 
+    const result = {type};
+    if (custom_type) {
+        result.custom_type = custom_type;
+    }
+
     switch (type) {
     case 'undefined':
-        return {type: type};
+        return result;
 
     case 'number':
-        return {type: type, value: serializeNumber(value)};
+        result.value = serializeNumber(value);
+        return result;
 
     case 'boolean':
     case 'string':
     case 'bigint':
-        return {type: type, value: value.toString()};
+        result.value = value.toString();
+        return result;
 
     case 'symbol':
-        return {type: type, value: value.description};
+        result.value = value.description;
+        return result;
 
     case 'Date':
     case 'RegExp':
     case 'URL':
-        return {type: type, value: value.toString()};
+        result.value = value.toString();
+        return result;
     
     case 'Uint32Array':
     case 'Int32Array':
@@ -261,7 +271,7 @@ function encode(value, memoryMap = new Map(), transform) {
                 // how to reach it again.
                 memoryMap.set(memoizeValue, memoryMap.size);
 
-                const dst = {type: type};
+                const dst = result;
                 if (type.endsWith('Array') && type !== 'Array') {
                     // TypedArrays
                     dst.arraytype = value.constructor.name;
@@ -302,7 +312,9 @@ function encode(value, memoryMap = new Map(), transform) {
             } else {
                 // When deserializing, replace this with the ith object
                 // that was deserialized.
-                return {type: 'reference', index: i}
+                result.type = 'reference';
+                result.index = i;
+                return result;
             }
         }
 
@@ -310,9 +322,13 @@ function encode(value, memoryMap = new Map(), transform) {
         if (/\[native code\]\s*\}\s*$/.test(value.toString())) {
             // Built-in, see if it is on the window or Math object
             if (window[value.name] === value) {
-                return {type: 'function', value: 'window.' + value.name};
+                result.type = 'function';
+                result.value = 'window.' + value.name;
+                return result;
             } else if (Math[value.name] === value) {
-                return {type: 'function', value: 'Math.' + value.name};
+                result.type = 'function';
+                result.value = 'Math.' + value.name;
+                return result;
             } else {
                 throw 'Cannot serialize function ' + value.name;
             }

@@ -46,13 +46,14 @@ that should be eliminated, `transform({this_is_a_cache: true, ...})`
 could return `null`. If there is color paletting, then 
 `transform({r: 1, g: 0.5, b:0})` could return `{palette_value: 5}`.
 
-If `transform(value) -> value` is provided, then it is run on each 
+If `transform(value) -> [value, custom_type]` is provided, then it is run on each 
 value *after* cycle detection and *before* serialization. 
 `transform()` may return a value with a different type than the input, 
 and may mutate its input. It is called once for each value 
-encountered in the object graph.
+encountered in the object graph. If string `custom_type` is not `undefined`, then it is
+the `custom_type` to pass to `untransform()` in deserialization.
 
-If `untransform(value, type_string) -> value` is provided, then it 
+If `untransform(value, custom_type) -> value` is provided, then it 
 is run on each value *after* deserialization and *before* the value
 is returned to the caller. It is called once for each value encountered
 in the deserialized object graph.
